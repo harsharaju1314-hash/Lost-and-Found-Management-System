@@ -1,0 +1,40 @@
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const config = require('../config');
+
+// Ensure upload directory exists
+if (!fs.existsSync(config.uploadDir)) {
+  fs.mkdirSync(config.uploadDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, config.uploadDir);
+  },
+  filename: function (req, file, cb) {
+    // Sanitize filename and create unique name
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const ext = path.extname(file.originalname).toLowerCase();
+    cb(null, `item-${uniqueSuffix}${ext}`);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+  if (allowedMimeTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('Invalid file type. Only JPEG, PNG, and WebP images are allowed.'), false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
+  },
+  fileFilter: fileFilter
+});
+
+module.exports = upload;

@@ -1,0 +1,33 @@
+{
+  "name": "lost-and-found-server",
+  "version": "1.0.0",
+  "description": "Backend REST API for Lost & Found Management System",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "seed": "node src/database/seed.js",
+    "test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.8.1",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
+    "verbose": true
+  }
+}

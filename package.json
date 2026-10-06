@@ -1,0 +1,21 @@
+{
+  "name": "lost-and-found-management-system",
+  "version": "1.0.0",
+  "description": "A realistic Lost & Found Management System web application with rule-based matching and claim verification workflows.",
+  "scripts": {
+    "server": "npm --prefix server start",
+    "server:dev": "npm --prefix server run dev",
+    "client": "npm --prefix client dev",
+    "client:build": "npm --prefix client build",
+    "dev": "concurrently \"npm run server:dev\" \"npm run client\"",
+    "test": "npm --prefix server test && npm --prefix client test",
+    "test:server": "npm --prefix server test",
+    "test:client": "npm --prefix client test",
+    "seed": "npm --prefix server run seed"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "author": "Harsha Raju",
+  "license": "MIT"
+}
