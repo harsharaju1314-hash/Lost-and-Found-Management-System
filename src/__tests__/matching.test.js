@@ -3,8 +3,8 @@ const {
   calculateDateDifferenceDays,
   calculateScore,
   findMatches
-} = require('../src/services/matchingService');
-const { getDatabase } = require('../src/database/db');
+} = require('../services/matchingService');
+const { getDatabase } = require('../database/db');
 
 describe('Rule-Based Matching Service', () => {
   let db;

@@ -1,6 +1,6 @@
 const request = require('supertest');
-const app = require('../src/app');
-const { getDatabase } = require('../src/database/db');
+const app = require('../app');
+const { getDatabase } = require('../database/db');
 
 describe('Items API Endpoints', () => {
   let db;

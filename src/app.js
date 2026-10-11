@@ -1,8 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 const config = require('./config');
-const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
+const { errorHandler } = require('./middleware/errorHandler');
 
 // Route imports
 const authRoutes = require('./routes/authRoutes');
@@ -41,8 +42,27 @@ app.use('/api/items', itemRoutes);
 app.use('/api/claims', claimRoutes);
 app.use('/api/stats', statsRoutes);
 
-// Catch 404 & Global Error Handling
-app.use(notFoundHandler);
+// In production, serve static files from client build
+const distPath = path.join(__dirname, '../dist');
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) {
+      return next();
+    }
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+}
+
+// 404 for unmatched API routes
+app.use('/api/*', (req, res) => {
+  res.status(404).json({
+    success: false,
+    error: `Endpoint not found: ${req.method} ${req.originalUrl}`
+  });
+});
+
+// Global Error Handling
 app.use(errorHandler);
 
 module.exports = app;

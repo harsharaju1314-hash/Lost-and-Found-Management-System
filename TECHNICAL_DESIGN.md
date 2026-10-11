@@ -99,7 +99,7 @@ Maintains an immutable audit log of all claim status transitions.
 
 ## 4. Rule-Based Matching Engine Specification
 
-Rather than relying on non-deterministic machine learning or external cloud services, the platform implements a transparent, deterministic heuristic scoring engine in `server/src/services/matchingService.js`.
+Rather than relying on non-deterministic machine learning or external cloud services, the platform implements a transparent, deterministic heuristic scoring engine in `src/services/matchingService.js`.
 
 ### 4.1 Heuristic Weights (Total Score: 0 to 100)
 1. **Category Equality (35 points)**: Exact match between target item and candidate item category.

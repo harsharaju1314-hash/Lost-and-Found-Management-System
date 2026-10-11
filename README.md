@@ -38,14 +38,14 @@ Handling misplaced property via bulletin boards, messaging channels, or informal
 | **Frontend** | React 19, JavaScript (ES6+), HTML5, CSS3 (Figma-inspired custom design tokens), Lucide React |
 | **Backend** | Node.js, Express.js, REST API architecture |
 | **Database** | SQLite3 (`better-sqlite3` driver) |
-| **Testing** | Jest, Supertest (Backend), Vitest, React Testing Library, jsdom (Frontend) |
+| **Testing** | Vitest, React Testing Library, Supertest, jsdom |
 | **Version Control** | Git, GitHub |
 
 ---
 
 ## System Architecture / Workflow
 
-The system follows a standard three-tier monolithic architecture:
+The system follows a standard three-tier architecture in a clean, unified project repository:
 
 ```
 User / Client  ──►  REST API Layer  ──►  Business Logic Layer  ──►  SQLite Database
@@ -63,86 +63,83 @@ $$\text{User Request} \longrightarrow \text{Express Route} \longrightarrow \text
 
 ```text
 Lost-and-Found-Management-System/
-├── package.json                 # Root script orchestrator
+├── package.json                 # Project dependencies & npm scripts
+├── vite.config.mjs              # Vite & Vitest configuration
+├── index.html                   # HTML entry point
+├── .env.example                 # Environment configuration template
 ├── README.md                    # Project documentation
-├── TECHNICAL_DESIGN.md          # In-depth architectural specification
-├── USER_GUIDE.md                # End-user and admin guide
-├── server/                      # Backend REST API
-│   ├── package.json
-│   ├── .env.example
-│   ├── src/
-│   │   ├── app.js               # Express application configuration
-│   │   ├── server.js            # Server entrypoint and auto-seed check
-│   │   ├── config/              # Environment settings
-│   │   ├── database/
-│   │   │   ├── db.js            # SQLite database connection helper
-│   │   │   ├── schema.sql       # SQL table schemas & indexes
-│   │   │   └── seed.js          # Realistic sample data seed script
-│   │   ├── middleware/
-│   │   │   ├── auth.js          # JWT authentication and admin role guard
-│   │   │   ├── validate.js      # Request validation schemas
-│   │   │   ├── upload.js        # Multer image upload filter
-│   │   │   └── errorHandler.js  # Global error handling
-│   │   ├── services/
-│   │   │   └── matchingService.js # Deterministic rule-based matching engine
-│   │   ├── controllers/
-│   │   │   ├── authController.js
-│   │   │   ├── itemController.js
-│   │   │   ├── claimController.js
-│   │   │   └── statsController.js
-│   │   └── routes/
-│   │       ├── authRoutes.js
-│   │       ├── itemRoutes.js
-│   │       ├── claimRoutes.js
-│   │       └── statsRoutes.js
-│   └── tests/                   # Backend Jest integration tests
-│       ├── auth.test.js
-│       ├── items.test.js
-│       ├── claims.test.js
-│       └── matching.test.js
-└── client/                      # Frontend React SPA
-    ├── package.json
-    ├── vite.config.js
-    ├── index.html
-    └── src/
-        ├── App.jsx              # Main routing and layout component
-        ├── main.jsx             # React DOM root
-        ├── context/
-        │   ├── AuthContext.jsx
-        │   └── NotificationContext.jsx
-        ├── services/
-        │   ├── api.js           # Fetch wrapper with JWT interceptor
-        │   ├── authService.js
-        │   ├── itemService.js
-        │   ├── claimService.js
-        │   └── statsService.js
-        ├── styles/
-        │   ├── theme.css        # Design tokens & CSS variables
-        │   └── components.css   # Reusable component styles
-        ├── components/
-        │   ├── Navbar.jsx
-        │   ├── Footer.jsx
-        │   ├── ItemCard.jsx
-        │   ├── StatusBadge.jsx
-        │   ├── MatchCard.jsx
-        │   ├── ClaimModal.jsx
-        │   ├── ConfirmModal.jsx
-        │   ├── EmptyState.jsx
-        │   └── LoadingSpinner.jsx
-        ├── pages/
-        │   ├── LandingPage.jsx
-        │   ├── SearchItemsPage.jsx
-        │   ├── ReportItemPage.jsx
-        │   ├── ItemDetailPage.jsx
-        │   ├── TrackClaimPage.jsx
-        │   └── AdminDashboardPage.jsx
-        └── __tests__/           # Frontend RTL/Vitest tests
-            ├── ItemCard.test.jsx
-            ├── MatchCard.test.jsx
-            ├── ReportItemPage.test.jsx
-            ├── SearchItemsPage.test.jsx
-            ├── TrackClaimPage.test.jsx
-            └── AdminDashboardPage.test.jsx
+├── TECHNICAL_DESIGN.md          # Architectural specification
+├── USER_GUIDE.md                # End-user & admin guide
+├── public/                      # Static assets & icons
+│   ├── favicon.svg
+│   └── icons.svg
+└── src/                         # Application source code
+    ├── app.js                   # Express REST API & SPA static router
+    ├── server.js                # Server entry point & auto-seed check
+    ├── config/                  # Server configuration
+    ├── database/                # SQLite connection, schema & seed
+    │   ├── db.js
+    │   ├── schema.sql
+    │   └── seed.js
+    ├── middleware/              # Auth, validation, upload, error handling
+    │   ├── auth.js
+    │   ├── validate.js
+    │   ├── upload.js
+    │   └── errorHandler.js
+    ├── controllers/             # REST API controllers
+    │   ├── authController.js
+    │   ├── itemController.js
+    │   ├── claimController.js
+    │   └── statsController.js
+    ├── routes/                  # Express route definitions
+    │   ├── authRoutes.js
+    │   ├── itemRoutes.js
+    │   ├── claimRoutes.js
+    │   └── statsRoutes.js
+    ├── services/                # Matching engine & frontend API services
+    │   ├── matchingService.js   # Deterministic rule-based matching engine
+    │   ├── api.js               # Fetch HTTP client with JWT interceptor
+    │   ├── authService.js
+    │   ├── itemService.js
+    │   ├── claimService.js
+    │   └── statsService.js
+    ├── context/                 # React Context providers
+    │   ├── AuthContext.jsx
+    │   └── NotificationContext.jsx
+    ├── components/              # Reusable UI components
+    │   ├── Navbar.jsx
+    │   ├── Footer.jsx
+    │   ├── ItemCard.jsx
+    │   ├── StatusBadge.jsx
+    │   ├── MatchCard.jsx
+    │   ├── ClaimModal.jsx
+    │   ├── ConfirmModal.jsx
+    │   ├── EmptyState.jsx
+    │   └── LoadingSpinner.jsx
+    ├── pages/                   # Application views
+    │   ├── LandingPage.jsx
+    │   ├── SearchItemsPage.jsx
+    │   ├── ReportItemPage.jsx
+    │   ├── ItemDetailPage.jsx
+    │   ├── TrackClaimPage.jsx
+    │   └── AdminDashboardPage.jsx
+    ├── styles/                  # Design system tokens and styles
+    │   ├── theme.css
+    │   └── components.css
+    ├── App.jsx                  # Main React component
+    ├── main.jsx                 # React root renderer
+    ├── setupTests.js            # Vitest DOM test setup
+    └── __tests__/               # Automated unit & integration tests
+        ├── auth.test.js
+        ├── items.test.js
+        ├── claims.test.js
+        ├── matching.test.js
+        ├── ItemCard.test.jsx
+        ├── MatchCard.test.jsx
+        ├── ReportItemPage.test.jsx
+        ├── SearchItemsPage.test.jsx
+        ├── TrackClaimPage.test.jsx
+        └── AdminDashboardPage.test.jsx
 ```
 
 ---
@@ -182,7 +179,7 @@ Lost-and-Found-Management-System/
 | `POST` | `/api/items/:id/claims` | Submit an ownership claim with verification proof |
 | `GET` | `/api/claims/track/:code` | Public status tracking and timeline by Claim Tracking Code |
 | `GET` | `/api/claims` | List claims (Admin all claims, or filtered by claimant email) |
-| `GET` | `/api/claims/:id` | Get detailed claim with audit history (Admin or Claimant) |
+| `GET` | `/api/claims/:id` | Get claim details with timeline updates (Admin or Claimant) |
 | `PATCH` | `/api/claims/:id` | Review claim, update status (`approved`/`rejected`/`under_review`), add resolution note |
 
 ### Statistics
@@ -257,28 +254,18 @@ cd Lost-and-Found-Management-System
 ```
 
 ### 2. Install Dependencies
-Install all root, backend, and frontend packages:
+Install all project dependencies with a single command:
 ```bash
-# Install root dependencies
 npm install
-
-# Install server dependencies
-cd server
-npm install
-
-# Install client dependencies
-cd ../client
-npm install
-cd ..
 ```
 
 ### 3. Environment Configuration
-Create the environment configuration in the `server` directory:
+Create the `.env` configuration file:
 ```bash
-cp server/.env.example server/.env
+cp .env.example .env
 ```
 
-Default variables in `server/.env`:
+Default variables in `.env`:
 ```env
 PORT=5000
 NODE_ENV=development
@@ -298,27 +285,19 @@ npm run seed
 
 ## Running the Application
 
-### Option A: Run Both Client and Server Concurrently (Recommended)
-From the root directory:
+### Development Mode (Concurrent Client & Server)
 ```bash
 npm run dev
 ```
-- **Frontend App**: `http://localhost:5173`
+- **Frontend Client**: `http://localhost:5173`
 - **Backend API**: `http://localhost:5000`
 
-### Option B: Run Services Independently
-
-**Start Backend Server:**
+### Production Build & Serve
 ```bash
-cd server
-npm run dev
+npm run build
+npm start
 ```
-
-**Start Frontend Client:**
-```bash
-cd client
-npm run dev
-```
+Starts the Node.js production server, which serves both the API endpoints and the compiled React SPA.
 
 ---
 
@@ -333,24 +312,24 @@ npm run dev
 
 ## Testing
 
-The project includes unit and integration tests across both the server (API & database layer) and the client (UI & component layer).
+The project includes 45 automated unit and integration tests covering the database layer, API endpoints, deterministic matching heuristics, and React components.
 
-### Run All Test Suites
+### Run All Tests
 ```bash
 npm test
 ```
 
-### Run Backend Tests Only
-```bash
-npm run test:server
-```
-*Tests cover item creation, validation, search filters, rule-based matching calculations, claim submission, tracking codes, authorization checks, and claim status transitions.*
-
-### Run Frontend Tests Only
-```bash
-npm run test:client
-```
-*Tests cover card rendering, form input validation, search filtering, claim tracking displays, admin login, and reviewer queue interaction.*
+### Test Suite Summary (45 Tests Passing)
+- **`src/__tests__/auth.test.js`**: User registration, role protection, login token issuance, password validation.
+- **`src/__tests__/items.test.js`**: Lost & found reporting, input validation, search query, category filtering, match retrieval.
+- **`src/__tests__/claims.test.js`**: Claim submission, code tracking, admin authorization, claim approval workflow, item status sync.
+- **`src/__tests__/matching.test.js`**: Keyword extraction, stopword filtering, date proximity score, heuristic algorithm.
+- **`src/__tests__/ItemCard.test.jsx`**: Card rendering, status badges, details click handler.
+- **`src/__tests__/MatchCard.test.jsx`**: Confidence badges, score percentages, heuristic reasons list.
+- **`src/__tests__/ReportItemPage.test.jsx`**: Form validation errors, lost/found tab switching, submission receipt.
+- **`src/__tests__/SearchItemsPage.test.jsx`**: Search filter queries, status filtering, filter reset.
+- **`src/__tests__/TrackClaimPage.test.jsx`**: Claim code lookup, status timeline display, error states.
+- **`src/__tests__/AdminDashboardPage.test.jsx`**: Admin authentication prompt, claim review table, approval interaction.
 
 ---
 
@@ -377,7 +356,7 @@ npm run test:client
 - Implemented a deterministic rule-based matching engine with stopword filtering and weighted scoring heuristics without relying on heavy external AI services.
 - Designed a privacy-conscious data workflow that conceals sensitive verification evidence from public search queries.
 - Created a cohesive, accessible Figma-inspired UI design system in pure CSS with responsive flexbox and grid layouts.
-- Wrote end-to-end automated unit and integration tests with Jest, Supertest, Vitest, and React Testing Library.
+- Wrote end-to-end automated unit and integration tests with Vitest, Supertest, and React Testing Library.
 
 ---
 
